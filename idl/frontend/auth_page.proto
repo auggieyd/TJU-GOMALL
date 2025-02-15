@@ -7,14 +7,19 @@ import "frontend/common.proto";
 
 option go_package = "frontend/auth";
 
-message LoginReq {
+message RegisterReq {
     string email = 1 [(api.form)="email"];
     string password = 2 [(api.form)="password"];
+    string password_confirm = 2 [(api.form)="password_confirm"];
 }
 
 service AuthService {
    rpc login(LoginReq) returns(common.Empty) {
       option (api.post) = "/auth/login";
+   }
+
+   rpc login(RegisterReq) returns(common.Empty) {
+      option (api.post) = "/auth/register";
    }
 }
  
