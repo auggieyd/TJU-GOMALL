@@ -55,18 +55,19 @@
                     <button class="btn btn-outline-success"
                         type="submit">Search</button>
                 </form>
+                
                 <div class="ms-3">
                     <i class="fa-solid fa-cart-shopping fa-xl"></i>
                 </div>
-
+                {{ if .user_id }}  
                 <div class="ms-3">
                     <i class="fa-solid fa-user fa-xl"></i>
                 </div>
-
+                {{ else }}
                 <div class="ms-3">
                     <a type="button" class="btn btn-primary" href="/sign-in">Sign in</a>
                 </div>
-
+                {{ end }}
             </div>
         </div>
     </nav>

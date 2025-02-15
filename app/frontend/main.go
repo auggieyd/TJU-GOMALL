@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/router"
@@ -19,11 +20,15 @@ import (
 	"github.com/hertz-contrib/logger/accesslog"
 	hertzlogrus "github.com/hertz-contrib/logger/logrus"
 	"github.com/hertz-contrib/pprof"
+	"github.com/hertz-contrib/sessions"
+	"github.com/hertz-contrib/sessions/redis"
+	"github.com/joho/godotenv"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	_ = godotenv.Load()
 	// init dal
 	// dal.Init()
 	address := conf.GetConf().Hertz.Address
@@ -44,10 +49,16 @@ func main() {
 		ctx.HTML(consts.StatusOK, "sign-in.tmpl", utils.H{"Title": "Sign In"})
 	})
 
+	h.GET("/sign-up", func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "sign-in.tmpl", utils.H{"Title": "Sign Up"})
+	})
+
 	h.Spin()
 }
 
 func registerMiddleware(h *server.Hertz) {
+	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
+	h.Use(sessions.New("cloudwego-shop", store))
 	// log
 	logger := hertzlogrus.NewLogger()
 	hlog.SetLogger(logger)
