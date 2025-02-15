@@ -19,6 +19,6 @@ func SendSuccessResponse(ctx context.Context, c *app.RequestContext, code int, d
 }
 
 func WarpRespose(ctx context.Context, c *app.RequestContext, content map[string]any) map[string]any {
-	content["user_id"] = 0
+	content["user_id"] = 1
 	return content
 }
