@@ -39,10 +39,8 @@
                             Categories
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item"
-                                    href="#">t-shirt</a></li>
-                            <li><a class="dropdown-item"
-                                    href="#">sticker</a></li>
+                            <li><a class="dropdown-item" href="#">t-shirt</a></li>
+                            <li><a class="dropdown-item" href="#">sticker</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -67,7 +65,11 @@
                     </div>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Order Center</a></li>
-                        <li><a class="dropdown-item" href="/auth/Logout">Logout</a></li>
+                        <li>
+                            <form action="/auth/logout" method="post">
+                                <button class="dropdown-item" type="submit">Logout</button>
+                            </form>
+                        </li>
                     </ul>
                   </div>
                 {{ else }}
