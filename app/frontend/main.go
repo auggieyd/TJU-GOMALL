@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/router"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/conf"
+	"github.com/cloudwego/biz-demo/gomall/app/frontend/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -29,6 +30,9 @@ import (
 
 func main() {
 	_ = godotenv.Load()
+	if os.Getenv("SESSION_SECRET") != "DFOAIFJ23RLJFOA" {
+		hlog.Fatal("SESSION_SECRET 环境变量未设置")
+	}
 	// init dal
 	// dal.Init()
 	address := conf.GetConf().Hertz.Address
@@ -45,8 +49,16 @@ func main() {
 	h.LoadHTMLGlob("template/*")
 	h.Static("/static", "./")
 
+	h.GET("/about", func(c context.Context, ctx *app.RequestContext) {
+		ctx.HTML(consts.StatusOK, "about.tmpl", utils.H{"Title": "About"})
+	})
+
 	h.GET("/sign-in", func(c context.Context, ctx *app.RequestContext) {
-		ctx.HTML(consts.StatusOK, "sign-in.tmpl", utils.H{"Title": "Sign In"})
+		data := utils.H{
+			"Title": "Sign In",
+			"Next":  ctx.Request.Header.Get("Referer"),
+		}
+		ctx.HTML(consts.StatusOK, "sign-in.tmpl", data)
 	})
 
 	h.GET("/sign-up", func(c context.Context, ctx *app.RequestContext) {
@@ -57,7 +69,10 @@ func main() {
 }
 
 func registerMiddleware(h *server.Hertz) {
-	store, _ := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
+	store, err := redis.NewStore(10, "tcp", conf.GetConf().Redis.Address, "", []byte(os.Getenv("SESSION_SECRET")))
+	if err != nil {
+		hlog.Fatalf("创建 Redis session store 失败: %v", err)
+	}
 	h.Use(sessions.New("cloudwego-shop", store))
 	// log
 	logger := hertzlogrus.NewLogger()
@@ -97,4 +112,6 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
+
+	middleware.Register(h)
 }

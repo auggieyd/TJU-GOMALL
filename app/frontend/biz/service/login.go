@@ -4,7 +4,6 @@ import (
 	"context"
 
 	auth "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/auth"
-	common "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/common"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/hertz-contrib/sessions"
 )
@@ -18,13 +17,18 @@ func NewLoginService(Context context.Context, RequestContext *app.RequestContext
 	return &LoginService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *LoginService) Run(req *auth.LoginReq) (resp *common.Empty, err error) {
-	//defer func() {
-	// hlog.CtxInfof(h.Context, "req = %+v", req)
-	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
-	//}()
+func (h *LoginService) Run(req *auth.LoginReq) (redrect string, err error) {
+
 	session := sessions.Default(h.RequestContext)
 	session.Set("user_id", 1)
-	session.Save()
+	err = session.Save()
+	if err != nil {
+		return "", err
+	}
+	redrect = "/"
+	if req.Next != "" {
+		redrect = req.Next
+	}
+
 	return
 }
