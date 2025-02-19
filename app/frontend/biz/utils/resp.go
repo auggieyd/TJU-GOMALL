@@ -2,9 +2,8 @@ package utils
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/cloudwego/biz-demo/gomall/app/frontend/middleware"
+	frontendUtils "github.com/cloudwego/biz-demo/gomall/app/frontend/utils"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -21,7 +20,7 @@ func SendSuccessResponse(ctx context.Context, c *app.RequestContext, code int, d
 }
 
 func WarpRespose(ctx context.Context, c *app.RequestContext, content map[string]any) map[string]any {
-	content["user_id"] = ctx.Value(middleware.SessionUserId)
-	fmt.Println("user_id", content["user_id"])
+	content["user_id"] = frontendUtils.GetUserIdFromCtx(ctx)
+	// fmt.Println("user_id", content["user_id"])
 	return content
 }

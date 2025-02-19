@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/router"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/conf"
+	"github.com/cloudwego/biz-demo/gomall/app/frontend/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/middleware"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
@@ -30,9 +31,10 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	if os.Getenv("SESSION_SECRET") != "DFOAIFJ23RLJFOA" {
-		hlog.Fatal("SESSION_SECRET 环境变量未设置")
-	}
+	// if os.Getenv("SESSION_SECRET") != "DFOAIFJ23RLJFOA" {
+	// 	hlog.Fatal("SESSION_SECRET 环境变量未设置")
+	// }
+	rpc.Init()
 	// init dal
 	// dal.Init()
 	address := conf.GetConf().Hertz.Address
