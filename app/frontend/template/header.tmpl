@@ -16,7 +16,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
-            <img class="navbar-brand" href="#" src="/static/image/tju-logo.jpg"
+            <img class="navbar-brand" href="#" src="/static/image/logo.jpg"
                 alt="cloudwego" style="height: 3em" />
             <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
@@ -32,25 +32,22 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#"
-                            role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Categories
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">t-shirt</a></li>
-                            <li><a class="dropdown-item" href="#">sticker</a></li>
+                            <li><a class="dropdown-item" href="/category/t-shirt">T-shirt</a></li>
+                            <li><a class="dropdown-item" href="/category/sticker">Sticker</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"  aria-current="page"  href="/about">About</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search"
-                        placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success"
-                        type="submit">Search</button>
+                <form class="d-flex ms-auto" role="search" action="/search" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search"
+                           aria-label="Search" value="{{ .q }}">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 
                 <div class="ms-3">

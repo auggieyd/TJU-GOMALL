@@ -24,9 +24,12 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 	}
 	productQuery := model.NewProductQuery(s.ctx, mysql.DB)
 	p, err := productQuery.GetById(int(req.Id))
-	if err == nil {
+	if err != nil {
+		// fmt.Println("productQuery Error!")
 		return nil, err
 	}
+
+	// fmt.Println("p:", p)
 
 	return &product.GetProductResp{Product: &product.Product{
 		Id:          uint32(p.ID),

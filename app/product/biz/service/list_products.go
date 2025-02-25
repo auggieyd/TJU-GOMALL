@@ -21,7 +21,7 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	categoryQuery := model.NewCategoryQuery(s.ctx, mysql.DB)
 
 	c, err := categoryQuery.GetProductsByCategoryName(req.CategoryName)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	resp = &product.ListProductsResp{}

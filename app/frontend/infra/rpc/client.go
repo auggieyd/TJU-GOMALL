@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	UserClient   userservice.Client
-	ProductClent productcatalogservice.Client
-	once         sync.Once
+	UserClient    userservice.Client
+	ProductClient productcatalogservice.Client
+	once          sync.Once
 )
 
 func Init() {
@@ -25,13 +25,21 @@ func Init() {
 }
 
 func initUserClient() {
+	var opts []client.Option
 	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegisterAddr)
 	FrontendUtils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
 
-	UserClient, err = userservice.NewClient("user", client.WithResolver(r))
+	UserClient, err = userservice.NewClient("user", opts...)
 	FrontendUtils.MustHandleError(err)
 }
 
 func initProductClient() {
+	var opts []client.Option
+	r, err := consul.NewConsulResolver(conf.GetConf().Hertz.RegisterAddr)
+	FrontendUtils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
 
+	ProductClient, err = productcatalogservice.NewClient("product", opts...)
+	FrontendUtils.MustHandleError(err)
 }

@@ -31,9 +31,6 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	// if os.Getenv("SESSION_SECRET") != "DFOAIFJ23RLJFOA" {
-	// 	hlog.Fatal("SESSION_SECRET 环境变量未设置")
-	// }
 	rpc.Init()
 	// init dal
 	// dal.Init()
@@ -41,11 +38,6 @@ func main() {
 	h := server.New(server.WithHostPorts(address))
 
 	registerMiddleware(h)
-
-	// add a ping route to test
-	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
-		ctx.JSON(consts.StatusOK, utils.H{"ping": "pong"})
-	})
 
 	router.GeneratedRegister(h)
 	h.LoadHTMLGlob("template/*")

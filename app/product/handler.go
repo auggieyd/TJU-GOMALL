@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	product "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
+
 	"github.com/cloudwego/biz-demo/gomall/app/product/biz/service"
+	product "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
 )
 
 // ProductCatalogServiceImpl implements the last service interface defined in the IDL.
@@ -19,6 +20,11 @@ func (s *ProductCatalogServiceImpl) ListProducts(ctx context.Context, req *produ
 // GetProduct implements the ProductCatalogServiceImpl interface.
 func (s *ProductCatalogServiceImpl) GetProduct(ctx context.Context, req *product.GetProductReq) (resp *product.GetProductResp, err error) {
 	resp, err = service.NewGetProductService(ctx).Run(req)
+
+	// fmt.Println("-----------------")
+	// fmt.Println(req)
+	// fmt.Println(resp)
+	// fmt.Println("-----------------")
 
 	return resp, err
 }

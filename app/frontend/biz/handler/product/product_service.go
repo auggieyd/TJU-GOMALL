@@ -2,6 +2,7 @@ package product
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/service"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/utils"
@@ -27,12 +28,18 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	fmt.Println("-------------------------------")
+	for key, value := range resp {
+		fmt.Printf("键: %s, 值: %v\n", key, value)
+	}
+	fmt.Println("-------------------------------")
+
 	c.HTML(consts.StatusOK, "product.tmpl", resp)
 }
 
-// SearchProducs .
+// SearchProduct.
 // @router /search [GET]
-func SearchProducs(ctx context.Context, c *app.RequestContext) {
+func SearchProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.SearchProductsReq
 	err = c.BindAndValidate(&req)
@@ -41,7 +48,8 @@ func SearchProducs(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := service.NewSearchProducsService(ctx, c).Run(&req)
+	resp, err := service.NewSearchProductService(ctx, c).Run(&req)
+
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
