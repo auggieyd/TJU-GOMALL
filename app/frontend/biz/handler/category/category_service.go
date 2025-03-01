@@ -27,5 +27,5 @@ func Category(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "category.tmpl", resp)
+	c.HTML(consts.StatusOK, "category.tmpl", utils.WarpResponse(ctx, c, resp))
 }

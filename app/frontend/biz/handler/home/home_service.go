@@ -27,5 +27,5 @@ func Home(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "home.tmpl", utils.WarpRespose(ctx, c, resp))
+	c.HTML(consts.StatusOK, "home.tmpl", utils.WarpResponse(ctx, c, resp))
 }
