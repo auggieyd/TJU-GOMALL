@@ -21,8 +21,7 @@ func NewAddItemService(ctx context.Context) *AddItemService {
 
 // Run create note info
 func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err error) {
-	// Finish your business logic.
-	fmt.Println("Id:", req.Item.ProductId)
+
 	productResp, err := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{Id: req.Item.ProductId})
 	if err != nil {
 		fmt.Println("RPC ERROR!")

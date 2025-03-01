@@ -28,6 +28,7 @@ func (h *CheckoutService) Run(req *checkout.CheckoutReq) (resp map[string]any, e
 	userId := FrontendUtils.GetUserIdFromCtx(h.Context)
 
 	carts, err := rpc.CartClient.GetCart(h.Context, &rpccart.GetCartReq{UserId: uint32(userId)})
+
 	if err != nil {
 		return nil, err
 	}

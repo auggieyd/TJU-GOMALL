@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart"
@@ -22,11 +23,17 @@ func NewCheckoutService(ctx context.Context) *CheckoutService {
 
 // Run create note info
 func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.CheckoutResp, err error) {
+
 	cartResult, err := rpc.CartClient.GetCart(s.ctx, &cart.GetCartReq{UserId: req.UserId})
 	if err != nil {
+		// fmt.Println("Empty Cart 1!")
 		return nil, kerrors.NewGRPCBizStatusError(5005001, err.Error())
+		// klog.Error(err)
+		// err = fmt.Errorf("GetCart.err:%v", err)
+		// return
 	}
 	if cartResult == nil || cartResult.Cart == nil || len(cartResult.Cart.Items) == 0 {
+		// fmt.Println("Empty Cart 2!")
 		return nil, kerrors.NewGRPCBizStatusError(5004001, "Cart is Empty!")
 	}
 
@@ -65,11 +72,13 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 
 	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{UserId: req.UserId})
 	if err != nil {
+		// fmt.Println("Empty Cart ERROR!")
 		return nil, err
 	}
-
+	// fmt.Println("Empty Cart!")
 	paymentResult, err := rpc.PaymentClient.Charge(s.ctx, payReq)
 	if err != nil {
+		fmt.Println("Payment ERROR!", payReq)
 		return nil, err
 	}
 

@@ -43,6 +43,7 @@ func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string
 			CreditCardCvv:             req.Cvv,
 		},
 	})
+
 	if err != nil {
 		return nil, err
 	}

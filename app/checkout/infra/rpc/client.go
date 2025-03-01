@@ -60,7 +60,7 @@ func initProductClient() {
 		client.WithMetaHandler(transmeta.ClientTTHeaderHandler),
 	)
 
-	CartClient, err = cartservice.NewClient("product", opts...)
+	ProductClient, err = productcatalogservice.NewClient("product", opts...)
 	CartUtils.MustHandleError(err)
 }
 
@@ -75,7 +75,7 @@ func initPaymentClient() {
 		client.WithMetaHandler(transmeta.ClientTTHeaderHandler),
 	)
 
-	CartClient, err = cartservice.NewClient("payment", opts...)
+	PaymentClient, err = paymentservice.NewClient("payment", opts...)
 	CartUtils.MustHandleError(err)
 }
 

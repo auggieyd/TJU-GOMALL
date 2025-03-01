@@ -29,8 +29,6 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 		return nil, err
 	}
 
-	// fmt.Println("p:", p)
-
 	return &product.GetProductResp{Product: &product.Product{
 		Id:          uint32(p.ID),
 		Name:        p.Name,
