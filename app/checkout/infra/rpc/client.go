@@ -30,7 +30,7 @@ func InitClient() {
 		initCartClient()
 		initProductClient()
 		initPaymentClient()
-		// initOrderClient()
+		initOrderClient()
 	})
 }
 
@@ -79,7 +79,17 @@ func initPaymentClient() {
 	CartUtils.MustHandleError(err)
 }
 
-// func initOrderClient() {
-// 	OrderClient, err = orderservice.NewClient("order", commonSuite)
-// 	checkoututils.MustHandleError(err)
-// }
+func initOrderClient() {
+	var opts []client.Option
+	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
+	CartUtils.MustHandleError(err)
+	opts = append(opts, client.WithResolver(r))
+	opts = append(opts,
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: conf.GetConf().Kitex.Service}),
+		client.WithTransportProtocol(transport.GRPC),
+		client.WithMetaHandler(transmeta.ClientTTHeaderHandler),
+	)
+
+	OrderClient, err = orderservice.NewClient("order", opts...)
+	CartUtils.MustHandleError(err)
+}

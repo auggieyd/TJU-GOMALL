@@ -3,15 +3,16 @@ package service
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart"
 	checkout "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/checkout"
+	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/payment"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/google/uuid"
 )
 
 type CheckoutService struct {
@@ -28,9 +29,6 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	if err != nil {
 		// fmt.Println("Empty Cart 1!")
 		return nil, kerrors.NewGRPCBizStatusError(5005001, err.Error())
-		// klog.Error(err)
-		// err = fmt.Errorf("GetCart.err:%v", err)
-		// return
 	}
 	if cartResult == nil || cartResult.Cart == nil || len(cartResult.Cart.Items) == 0 {
 		// fmt.Println("Empty Cart 2!")
@@ -38,7 +36,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	}
 
 	var (
-		// oi    []*order.OrderItem
+		oi    []*order.OrderItem
 		total float32
 	)
 	for _, cartItem := range cartResult.Cart.Items {
@@ -52,11 +50,36 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		p := productResp.Product
 		cost := p.Price * float32(cartItem.Quantity)
 		total += cost
-
+		oi = append(oi, &order.OrderItem{
+			Item: &cart.CartItem{
+				ProductId: cartItem.ProductId,
+				Quantity:  cartItem.Quantity},
+			Cost: cost,
+		})
 	}
+
 	var orderId string
-	u, _ := uuid.NewRandom()
-	orderId = u.String()
+	// u, _ := uuid.NewRandom()
+	// orderId = u.String()
+	zipcode, _ := strconv.Atoi(req.Address.ZipCode)
+	orderResp, err := rpc.OrderClient.PlaceOrder(s.ctx, &order.PlaceOrderReq{
+		UserId:     req.UserId,
+		OrderItems: oi,
+		Email:      req.Email,
+		Address: &order.Address{
+			StreetAddress: req.Address.StreetAddress,
+			City:          req.Address.City,
+			Country:       req.Address.Country,
+			State:         req.Address.State,
+			ZipCode:       int32(zipcode),
+		},
+	})
+	if err != nil {
+		return nil, kerrors.NewGRPCBizStatusError(5004002, err.Error())
+	}
+	if orderResp != nil && orderResp.Order != nil {
+		orderId = orderResp.Order.OrderId
+	}
 
 	payReq := &payment.ChargeReq{
 		UserId:  req.UserId,
@@ -72,10 +95,9 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 
 	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{UserId: req.UserId})
 	if err != nil {
-		// fmt.Println("Empty Cart ERROR!")
 		return nil, err
 	}
-	// fmt.Println("Empty Cart!")
+
 	paymentResult, err := rpc.PaymentClient.Charge(s.ctx, payReq)
 	if err != nil {
 		fmt.Println("Payment ERROR!", payReq)

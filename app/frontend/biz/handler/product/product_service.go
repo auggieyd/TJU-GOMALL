@@ -2,7 +2,6 @@ package product
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/service"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/biz/utils"
@@ -28,11 +27,11 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	fmt.Println("-------------------------------")
-	for key, value := range resp {
-		fmt.Printf("键: %s, 值: %v\n", key, value)
-	}
-	fmt.Println("-------------------------------")
+	// fmt.Println("-------------------------------")
+	// for key, value := range resp {
+	// 	fmt.Printf("键: %s, 值: %v\n", key, value)
+	// }
+	// fmt.Println("-------------------------------")
 
 	c.HTML(consts.StatusOK, "product.tmpl", resp)
 }

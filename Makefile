@@ -1,6 +1,6 @@
 .PHONY: gen-frontend
 gen-frontend:
-	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend -module github.com/cloudwego/biz-demo/gomall/app/frontend --idl ../../idl/frontend/checkout_page.proto
+	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend -module github.com/cloudwego/biz-demo/gomall/app/frontend --idl ../../idl/frontend/order_page.proto
 
 	
 .PHONY: gen-product
@@ -23,3 +23,8 @@ gen-payment:
 gen-checkout:
 	@cd rpc_gen && cwgo client --type RPC --service checkout --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/checkout.proto
 	@cd app/checkout && cwgo server --type RPC --service checkout --module github.com/cloudwego/biz-demo/gomall/app/checkout --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/checkout.proto
+
+.PHONY: gen-order
+gen-order:
+	@cd rpc_gen && cwgo client --type RPC --service order --module github.com/cloudwego/biz-demo/gomall/rpc_gen -I ../idl --idl ../idl/order.proto
+	@cd app/order && cwgo server --type RPC --service order --module github.com/cloudwego/biz-demo/gomall/app/order --pass "-use github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/order.proto
