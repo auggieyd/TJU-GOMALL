@@ -1,6 +1,6 @@
 module github.com/cloudwego/biz-demo/gomall/app/frontend
 
-go 1.23.5
+go 1.24.0
 
 require (
 	github.com/cloudwego/biz-demo/gomall/rpc_gen v0.0.0-20250107114945-cd595cc0e3ad

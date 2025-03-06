@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-
+	"fmt"
 	auth "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/auth"
 	common "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/common"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/infra/rpc"
@@ -25,12 +25,12 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 	userResp, err := rpc.UserClient.Register(h.Context, &user.RegisterReq{
 		Email:           req.Email,
 		Password:        req.Password,
-		PasswordConfirm: req.PasswordConfirm,
+		ConfirmPassword: req.PasswordConfirm,
 	})
 
 	// fmt.Println("Email:", req.Email)
 	// fmt.Println("Password:", req.Password)
-	// fmt.Println("ConfirmPassword:", req.PasswordConfirm)
+	fmt.Println("ConfirmPassword:", req.PasswordConfirm)
 
 	if err != nil {
 		return nil, err

@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "172.18.0.4",
+            "port": 3308,
+            "driver": "MySQL",
+            "name": "docker",
+            "username": "root",
+            "database": "gorm"
+        }
+    ]
+}

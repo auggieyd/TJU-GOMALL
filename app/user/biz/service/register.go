@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/dal/mysql"
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/model"
@@ -20,6 +21,9 @@ func NewRegisterService(ctx context.Context) *RegisterService {
 // Run create note info
 func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResq, err error) {
 	// Finish your business logic.
+	fmt.Printf(req.Email)
+	fmt.Println(req.Password)
+	fmt.Println(req.PasswordConfirm)
 	if req.Email == "" || req.Password == "" || req.PasswordConfirm == "" {
 		return nil, errors.New("password or email is empty")
 	}

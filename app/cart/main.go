@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"time"
 
@@ -16,10 +17,15 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"log"
 )
 
 func main() {
 	_ = godotenv.Load()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	fmt.Println("cart service start")
 	dal.Init()
 	rpc.Init()
 	opts := kitexInit()
